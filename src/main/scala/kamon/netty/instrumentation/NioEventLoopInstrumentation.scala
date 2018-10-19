@@ -19,8 +19,8 @@ package kamon.netty.instrumentation
 import java.util
 
 import io.netty.channel.nio.NioEventLoop
-import io.netty.channel.{ChannelFuture, ChannelFutureListener}
-import kamon.metric.MinMaxCounter
+import io.netty.channel.{ ChannelFuture, ChannelFutureListener }
+import kamon.metric.RangeSampler
 import kamon.netty.Metrics
 import kamon.netty.util.EventLoopUtils._
 import kamon.netty.util.MonitoredQueue
@@ -46,7 +46,7 @@ class NioEventLoopInstrumentation {
     registeredChannels.decrement()
   }
 
-  val registeredChannelListener: MinMaxCounter  => ChannelFutureListener = registeredChannels => new ChannelFutureListener() {
+  val registeredChannelListener: RangeSampler  => ChannelFutureListener = registeredChannels => new ChannelFutureListener() {
     override def operationComplete(future: ChannelFuture): Unit = {
       if(future.isSuccess) {
         registeredChannels.increment()
