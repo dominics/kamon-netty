@@ -16,12 +16,14 @@
 
 package kamon.netty.instrumentation
 
+import java.time.Instant
+
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.http.HttpResponse
 import kamon.Kamon
 import kamon.netty.Netty
 import kamon.trace.Span
-import org.aspectj.lang.annotation.{After, Aspect, Before}
+import org.aspectj.lang.annotation.{ After, Aspect, Before }
 
 @Aspect
 class HttpServerInstrumentation {
@@ -34,7 +36,7 @@ class HttpServerInstrumentation {
       val incomingContext = decodeContext(request)
       val serverSpan = Kamon.buildSpan(Netty.generateOperationName(request))
         .asChildOf(incomingContext.get(Span.ContextKey))
-        .withStartTimestamp(channel.startTime)
+        .withFrom(Instant.ofEpochMilli(channel.startTime))
         .withTag("span.kind", "server")
         .withTag("component", "netty")
         .withTag("http.method", request.getMethod.name())

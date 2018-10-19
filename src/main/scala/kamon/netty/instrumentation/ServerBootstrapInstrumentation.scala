@@ -16,7 +16,8 @@
 
 package kamon.netty.instrumentation
 
-import io.netty.channel.{Channel, ChannelHandler, ChannelHandlerContext, ChannelInboundHandlerAdapter}
+import io.netty.channel.{ Channel, ChannelHandler, ChannelHandlerContext, ChannelInboundHandlerAdapter }
+import kamon.Kamon
 import kamon.util.Clock
 import org.aspectj.lang.annotation._
 
@@ -52,7 +53,7 @@ object ServerBootstrapInstrumentation {
   @ChannelHandler.Sharable
   private class KamonHandler extends ChannelInboundHandlerAdapter {
     override def channelRead(ctx: ChannelHandlerContext, msg: AnyRef): Unit = {
-      ctx.channel().toContextAware().startTime = Clock.microTimestamp()
+      ctx.channel().toContextAware().startTime = Clock.toEpochMicros(Kamon.clock().instant())
       super.channelRead(ctx, msg)
     }
   }

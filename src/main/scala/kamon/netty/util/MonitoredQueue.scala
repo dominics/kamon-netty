@@ -64,13 +64,13 @@ object MonitoredQueue {
   def apply(eventLoop: EventLoop, underlying: util.Queue[Runnable]): MonitoredQueue =
     new MonitoredQueue(eventLoop, underlying)
 
-  def timeInQueue(runnable: Runnable):Long =
+  def timeInQueue(runnable: Runnable): Long =
     runnable.asInstanceOf[TimedTask].timeInQueue
-
 }
 
 private[this] class TimedTask(underlying:Runnable)(implicit metrics: EventLoopMetrics) extends Runnable with HasContext {
-  val startTime:Long =  Clock.relativeNanoTimestamp()
+  val clock: Clock = Kamon.clock()
+  val startTime: Long =  clock.nanos()
   val context: Context = Kamon.currentContext()
 
   override def run(): Unit =
@@ -79,5 +79,5 @@ private[this] class TimedTask(underlying:Runnable)(implicit metrics: EventLoopMe
     }
 
   def timeInQueue: Long =
-    Clock.relativeNanoTimestamp() - startTime
+    clock.nanos() - startTime
 }
