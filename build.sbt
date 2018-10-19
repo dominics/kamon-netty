@@ -13,19 +13,18 @@
  * =========================================================================================
  */
 
-val kamonCore       = "io.kamon"        %% "kamon-core"                     % "1.0.0-RC1"
-val kamonTestkit    = "io.kamon"        %% "kamon-testkit"                  % "1.0.0-RC1"
+val kamonCore       = "io.kamon"        %% "kamon-core"                     % "1.1.0"
+val kamonTestkit    = "io.kamon"        %% "kamon-testkit"                  % "1.1.0"
 
 val netty           = "io.netty"        %  "netty-all"                      % "4.0.51.Final"
 val nettyNative     = "io.netty"        %  "netty-transport-native-epoll"   % "4.0.51.Final"    classifier "linux-x86_64"
 val logback         = "ch.qos.logback"  %  "logback-classic"                % "1.0.13"
 
-
 lazy val root = (project in file("."))
   .settings(Seq(
       name := "kamon-netty",
-      scalaVersion := "2.12.3",
-      crossScalaVersions := Seq("2.11.8", "2.12.3")))
+      scalaVersion := "2.12.7",
+      crossScalaVersions := Seq("2.11.12", "2.12.7")))
   .enablePlugins(JavaAgent)
   .settings(isSnapshot := true)
   .settings(resolvers += Resolver.bintrayRepo("kamon-io", "snapshots"))
