@@ -49,7 +49,7 @@ class HttpServerInstrumentation {
   def onEncodeResponse(ctx: ChannelHandlerContext, response:HttpResponse): Unit = {
     val serverSpan = ctx.channel().getContext().get(Span.ContextKey)
     if(isError(response.getStatus.code()))
-      serverSpan.addTag("error", value = true)
+      serverSpan.tag("error", value = true)
     serverSpan.finish()
   }
 }

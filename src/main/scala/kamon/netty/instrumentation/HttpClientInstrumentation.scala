@@ -68,7 +68,7 @@ class HttpClientInstrumentation {
 
   @AfterThrowing("decoderPointcut() && args(ctx, *, *)")
   def onDecodeError(ctx: ChannelHandlerContext): Unit = {
-    val clientSpan = ctx.channel().getContext().get(Span.ContextKey)
-    clientSpan.addTag("error", value = true).finish()
+    val clientSpan: Span = ctx.channel().getContext().get(Span.ContextKey)
+    clientSpan.tag("error", value = true).finish()
   }
 }
